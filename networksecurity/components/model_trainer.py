@@ -2,7 +2,7 @@ import os
 import sys
 
 from networksecurity.exception.exception import NetworkSecurityException 
-from networksecurity.logging.logger import logging
+from networksecurity.logging.logger import logger
 
 from networksecurity.entity.artifact_entity import DataTransformationArtifact,ModelTrainerArtifact
 from networksecurity.entity.config_entity import ModelTrainerConfig
@@ -32,10 +32,6 @@ import dagshub
 os.environ["MLFLOW_TRACKING_URI"]="https://dagshub.com/krishnaik06/networksecurity.mlflow"
 os.environ["MLFLOW_TRACKING_USERNAME"]="krishnaik06"
 os.environ["MLFLOW_TRACKING_PASSWORD"]="7104284f1bb44ece21e0e2adb4e36a250ae3251f"
-
-
-
-
 
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
