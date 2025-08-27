@@ -23,6 +23,7 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
+    # Gets the data from the mongodb database
     def export_collection_as_dataframe(self):
         """
         Read data from mongodb
@@ -42,6 +43,7 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException
         
+    # Creates the dir path and stores the data in that path
     def export_data_into_feature_store(self,dataframe: pd.DataFrame):
         try:
             feature_store_file_path=self.data_ingestion_config.feature_store_file_path
@@ -54,22 +56,23 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
+    # 
     def split_data_as_train_test(self,dataframe: pd.DataFrame):
         try:
             train_set, test_set = train_test_split(
                 dataframe, test_size=self.data_ingestion_config.train_test_split_ratio
             )
-            logging.info("Performed train test split on the dataframe")
 
-            logging.info(
+            logger.info("Performed train test split on the dataframe")
+
+            logger.info(
                 "Exited split_data_as_train_test method of Data_Ingestion class"
             )
             
             dir_path = os.path.dirname(self.data_ingestion_config.training_file_path)
-            
             os.makedirs(dir_path, exist_ok=True)
             
-            logging.info(f"Exporting train and test file path.")
+            logger.info(f"Exporting train and test file path.")
             
             train_set.to_csv(
                 self.data_ingestion_config.training_file_path, index=False, header=True
@@ -78,13 +81,12 @@ class DataIngestion:
             test_set.to_csv(
                 self.data_ingestion_config.testing_file_path, index=False, header=True
             )
-            logging.info(f"Exported train and test file path.")
 
-            
+            logger.info(f"Exported train and test file path.") 
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-        
+    # Initiates the process of data ingestion into the local machine 
     def initiate_data_ingestion(self):
         try:
             dataframe=self.export_collection_as_dataframe()
@@ -93,6 +95,5 @@ class DataIngestion:
             dataingestionartifact=DataIngestionArtifact(trained_file_path=self.data_ingestion_config.training_file_path,
                                                         test_file_path=self.data_ingestion_config.testing_file_path)
             return dataingestionartifact
-
         except Exception as e:
             raise NetworkSecurityException
