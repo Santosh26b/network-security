@@ -45,12 +45,12 @@ class DataTransformation:
         Returns:
           A Pipeline object
         """
-        logging.info(
+        logger.info(
             "Entered get_data_trnasformer_object method of Trnasformation class"
         )
         try:
            imputer:KNNImputer=KNNImputer(**DATA_TRANSFORMATION_IMPUTER_PARAMS)
-           logging.info(
+           logger.info(
                 f"Initialise KNNImputer with {DATA_TRANSFORMATION_IMPUTER_PARAMS}"
             )
            processor:Pipeline=Pipeline([("imputer",imputer)])
@@ -60,9 +60,9 @@ class DataTransformation:
 
         
     def initiate_data_transformation(self)->DataTransformationArtifact:
-        logging.info("Entered initiate_data_transformation method of DataTransformation class")
+        logger.info("Entered initiate_data_transformation method of DataTransformation class")
         try:
-            logging.info("Starting data transformation")
+            logger.info("Starting data transformation")
             train_df=DataTransformation.read_data(self.data_validation_artifact.valid_train_file_path)
             test_df=DataTransformation.read_data(self.data_validation_artifact.valid_test_file_path)
 

@@ -29,8 +29,8 @@ class DataValidation:
     def validate_number_of_columns(self,dataframe:pd.DataFrame)->bool:
         try:
             number_of_columns=len(self._schema_config)
-            logging.info(f"Required number of columns:{number_of_columns}")
-            logging.info(f"Data frame has columns:{len(dataframe.columns)}")
+            logger.info(f"Required number of columns:{number_of_columns}")
+            logger.info(f"Data frame has columns:{len(dataframe.columns)}")
             if len(dataframe.columns)==number_of_columns:
                 return True
             return False
@@ -91,7 +91,6 @@ class DataValidation:
 
             train_dataframe.to_csv(
                 self.data_validation_config.valid_train_file_path, index=False, header=True
-
             )
 
             test_dataframe.to_csv(

@@ -2,7 +2,7 @@ import os
 import sys
 
 from networksecurity.exception.exception import NetworkSecurityException
-from networksecurity.logging.logger import logging
+from networksecurity.logging.logger import logger
 
 from networksecurity.components.data_ingestion import DataIngestion
 from networksecurity.components.data_validation import DataValidation
@@ -39,10 +39,10 @@ class TrainingPipeline:
     def start_data_ingestion(self):
         try:
             self.data_ingestion_config=DataIngestionConfig(training_pipeline_config=self.training_pipeline_config)
-            logging.info("Start data Ingestion")
+            logger.info("Start data Ingestion")
             data_ingestion=DataIngestion(data_ingestion_config=self.data_ingestion_config)
             data_ingestion_artifact=data_ingestion.initiate_data_ingestion()
-            logging.info(f"Data Ingestion completed and artifact: {data_ingestion_artifact}")
+            logger.info(f"Data Ingestion completed and artifact: {data_ingestion_artifact}")
             return data_ingestion_artifact
         
         except Exception as e:
@@ -52,7 +52,7 @@ class TrainingPipeline:
         try:
             data_validation_config=DataValidationConfig(training_pipeline_config=self.training_pipeline_config)
             data_validation=DataValidation(data_ingestion_artifact=data_ingestion_artifact,data_validation_config=data_validation_config)
-            logging.info("Initiate the data Validation")
+            logger.info("Initiate the data Validation")
             data_validation_artifact=data_validation.initiate_data_validation()
             return data_validation_artifact
         except Exception as e:
