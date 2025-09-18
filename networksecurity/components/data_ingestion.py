@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from dotenv import load_dotenv
 load_dotenv()
 
+# Get the MongoDB URI from .env
 MONGO_DB_URL=os.getenv("MONGO_DB_URL")
 
 class DataIngestion:
@@ -23,7 +24,7 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-    # Gets the data from the mongodb database
+    # Gets the data from the mongodb database.
     def export_collection_as_dataframe(self):
         """
         Read data from mongodb
@@ -43,7 +44,7 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException
         
-    # Creates the dir path and stores the data in that path
+    # Creates the dir path and stores the data in that path.
     def export_data_into_feature_store(self,dataframe: pd.DataFrame):
         try:
             feature_store_file_path=self.data_ingestion_config.feature_store_file_path
@@ -56,7 +57,7 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-    # Splits the data as train test split
+    # Splits the data as train test split.
     def split_data_as_train_test(self,dataframe: pd.DataFrame):
         try:
             train_set, test_set = train_test_split(
@@ -86,7 +87,7 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-    # Initiates the process of data ingestion into the local machine 
+    # Initiates the process of data ingestion into the local machine.
     def initiate_data_ingestion(self):
         try:
             dataframe=self.export_collection_as_dataframe()
