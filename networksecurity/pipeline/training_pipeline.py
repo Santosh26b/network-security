@@ -103,8 +103,6 @@ class TrainingPipeline:
             self.s3_sync.sync_folder_to_s3(folder = self.training_pipeline_config.model_dir,aws_bucket_url=aws_bucket_url)
         except Exception as e:
             raise NetworkSecurityException(e,sys)
-        
-    
     
     def run_pipeline(self):
         try:
