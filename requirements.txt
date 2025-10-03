@@ -12,5 +12,7 @@ fastapi
 uvicorn
 python-multipart
 scipy
+bs4
+whois
 
 #-e . # This will point to the setup.py file
