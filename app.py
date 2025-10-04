@@ -277,7 +277,6 @@ async def analyze(payload: dict = Body(...)):
     except Exception as e:
         raise NetworkSecurityException(e, sys)
 
-# ------------------ Run ------------------
 if __name__ == "__main__":
     host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", 8000))
