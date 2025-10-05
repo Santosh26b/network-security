@@ -26,11 +26,15 @@ import mlflow
 from urllib.parse import urlparse
 
 import dagshub
-dagshub.init(repo_owner='Santosh26b', repo_name='network-security', mlflow=True)
 
-# os.environ["MLFLOW_TRACKING_URI"]="https://dagshub.com/krishnaik06/networksecurity.mlflow"
-# os.environ["MLFLOW_TRACKING_USERNAME"]="krishnaik06"
-# os.environ["MLFLOW_TRACKING_PASSWORD"]="7104284f1bb44ece21e0e2adb4e36a250ae3251f"
+# Read from environment variables
+dagshub_user = os.getenv("DAGSHUB_USER")
+
+dagshub.init(
+    repo_owner=dagshub_user,
+    repo_name='network-security',
+    mlflow=True
+)
 
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
