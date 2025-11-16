@@ -41,7 +41,7 @@ class DataIngestion:
             df.replace({"na":np.nan},inplace=True)
             return df
         except Exception as e:
-            raise NetworkSecurityException
+            raise NetworkSecurityException(e,sys)
         
     # Creates the dir path and stores the data in that path
     def export_data_into_feature_store(self,dataframe: pd.DataFrame):
@@ -96,4 +96,4 @@ class DataIngestion:
                                                         test_file_path=self.data_ingestion_config.testing_file_path)
             return dataingestionartifact
         except Exception as e:
-            raise NetworkSecurityException
+            raise NetworkSecurityException(e,sys)
