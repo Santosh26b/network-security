@@ -37,6 +37,8 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 # ------------------ MongoDB setup ------------------
+# NOTE: The client setup will fail if MONGODB_URL_KEY is not set or accessible.
+# However, this is outside the scope of the current Type Error fixes.
 client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
 from networksecurity.constant.training_pipeline import DATA_INGESTION_COLLECTION_NAME, DATA_INGESTION_DATABASE_NAME
 
@@ -106,7 +108,13 @@ async def predict_route(request: Request, file: UploadFile = File(...)):
         network_model = load_network_model()
         y_pred = network_model.predict(df)
         df['predicted_column'] = y_pred
-        df.to_csv('prediction_output/output.csv', index=False)
+
+        # FIX 2: Create prediction directory if it doesn't exist to prevent OSError
+        output_dir = 'prediction_output'
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        df.to_csv(f'{output_dir}/output.csv', index=False)
         table_html = df.to_html(classes='table table-striped')
         return templates.TemplateResponse("table.html", {"request": request, "table": table_html})
     except Exception as e:
@@ -156,7 +164,8 @@ def favicon(url):
         return 1 if r.status_code == 200 else -1
     except: return -1
 
-def port(url):
+# FIX 1: Renamed 'port' feature extraction function to avoid collision with 'port' variable below.
+def check_port_feature(url):
     try:
         domain = urlparse(url).netloc
         socket.create_connection((domain, 80), timeout=2)
@@ -165,7 +174,7 @@ def port(url):
 
 def https_token(url): return -1 if "https" in urlparse(url).netloc else 1
 def request_url(url): return 1 if url.startswith("https") else -1
-def url_of_anchor(url): return 1  # simplified
+def url_of_anchor(url): return 1   # simplified
 def links_in_tags(url): return 1
 def sfh(url): return -1 if url == "" or url.lower() == "about:blank" else 1
 def submitting_to_email(url): return -1 if "mailto:" in url else 1
@@ -225,7 +234,7 @@ def extract_features(url: str):
         "SSLfinal_State": ssl_final_state(url),
         "Domain_registeration_length": domain_registration_length(url),
         "Favicon": favicon(url),
-        "port": port(url),
+        "port": check_port_feature(url), # FIX 1: Calling the renamed function
         "HTTPS_token": https_token(url),
         "Request_URL": request_url(url),
         "URL_of_Anchor": url_of_anchor(url),
@@ -275,9 +284,13 @@ async def analyze(payload: dict = Body(...)):
 
         return response
     except Exception as e:
+        # NOTE: If this exception is a NetworkSecurityException, the error message from the root cause 
+        # (like 'int' object is not callable) is being captured and propagated.
+        # This is where the fix above prevents the "TypeError" from being caught.
         raise NetworkSecurityException(e, sys)
 
 if __name__ == "__main__":
     host = os.getenv("HOST", "0.0.0.0")
+    # This line defines the integer variable 'port' that conflicted with the 'port' function.
     port = int(os.getenv("PORT", 8080))
     app_run(app, host=host, port=port)
