@@ -104,7 +104,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: latest
         run: |
-         docker run -d -p 8080:8080 --ipc="host" --name=networksecurity -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} -e AWS_REGION=${{ secrets.AWS_REGION }} -e DAGSHUB_USER=${{ secrets.DAGSHUB_USER }} -e DAGSHUB_TOKEN=${{ secrets.DAGSHUB_TOKEN }} $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+         docker run -d -p 8080:8080 --ipc="host" --name=networksecurity -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} -e AWS_REGION=${{ secrets.AWS_REGION }} -e DAGSHUB_USER=${{ secrets.DAGSHUB_USER }} -e DAGSHUB_TOKEN=${{ secrets.DAGSHUB_TOKEN }} -e MONGO_DB_URL="mongodb+srv://santoshbudagavi:Santosh123@cluster0.uausjeo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       - name: Clean previous images and containers
         run: |
          docker system prune -f
